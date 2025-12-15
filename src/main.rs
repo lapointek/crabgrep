@@ -1,5 +1,6 @@
 use anyhow::{Context, Result};
 use clap::Parser;
+use log::{info, warn};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -13,6 +14,10 @@ struct Cli {
 }
 
 fn main() -> Result<()> {
+    env_logger::init();
+    info!("starting up");
+    warn!("oops, nothing implemented!");
+
     // Parse into the Cli struct
     let args = Cli::parse();
 
