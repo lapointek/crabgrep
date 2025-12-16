@@ -1,6 +1,5 @@
 use anyhow::{Context, Result};
 use clap::Parser;
-use log::{info, warn};
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 
@@ -13,32 +12,41 @@ struct Cli {
     path: std::path::PathBuf,
 }
 
-fn main() -> Result<()> {
-    env_logger::init();
-    info!("starting up");
-    warn!("oops, nothing implemented!");
+fn contains_pattern(line: &str, pattern: &str) -> bool {
+    line.contains(pattern)
+}
 
-    // Parse into the Cli struct
-    let args = Cli::parse();
-
+fn search_file(path: &std::path::Path, pattern: &str) -> Result<Vec<String>> {
     // Open file and propagate errors automatically
-    let file = File::open(&args.path)
-        .with_context(|| format!("could not open file `{}`", args.path.display()))?;
+    let file =
+        File::open(path).with_context(|| format!("could not open file `{}`", path.display()))?;
 
     // Wrap file in BufReader
-    let mut reader = BufReader::new(file);
-    let mut line = String::new();
+    let reader = BufReader::new(file);
 
-    // Display error when unable to read file
-    reader
-        .read_line(&mut line)
-        .with_context(|| format!("could not read file `{}`", args.path.display()))?;
-
+    let mut results = Vec::new();
     for line in reader.lines() {
         let line = line?;
-        if line.contains(&args.pattern) {
-            println!("{}", line);
+        if contains_pattern(&line, pattern) {
+            results.push(line);
         }
+    }
+    Ok(results)
+}
+
+#[test]
+fn test_pattern() {
+    assert!(contains_pattern("Hello World", "Hello"));
+    assert!(!contains_pattern("Hello World", "bye"));
+}
+
+fn main() -> Result<()> {
+    // Parse into the Cli struct
+    let args = Cli::parse();
+    let matches = search_file(&args.path, &args.pattern);
+
+    for line in matches {
+        println!("{:?}", line);
     }
 
     Ok(())
