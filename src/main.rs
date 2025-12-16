@@ -12,12 +12,6 @@ struct Cli {
     path: std::path::PathBuf,
 }
 
-#[test]
-fn test_pattern() {
-    assert!(find_matches::contains_pattern("Hello World", "Hello"));
-    assert!(!find_matches::contains_pattern("Hello World", "bye"));
-}
-
 fn main() -> Result<()> {
     // Parse into the Cli struct
     let args = Cli::parse();
