@@ -17,8 +17,6 @@ fn main() -> Result<()> {
     let args = Cli::parse();
     let matches = search_file(&args.path, &args.pattern);
 
-    let _ = search_file(&args.path, &args.pattern);
-
     if let Ok(line) = matches {
         println!("{:?}", line);
     }

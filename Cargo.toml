@@ -2,13 +2,26 @@
 name = "crabgrep"
 version = "0.1.0"
 edition = "2024"
+authors = ["Kevin Lapointe"]
+license = "MIT OR Apache-2.0"
+description = "A tool to search for text patterns in files."
+readme = "README.md"
+repository = "https://github.com/lapointek/crabgrep"
+keywords = ["cli", "search", "grep"]
+categories = ["command-line-utilities"]
+
 
 [[bin]]
 name = "cgrep"
 path = "src/main.rs"
 
 [dependencies]
-clap = { version="4.0", features=["derive"] }
+clap = { version = "4.0", features = ["derive"] }
 anyhow = "1.0"
 log = "0.4.29"
 env_logger = "0.11.8"
+
+[dev-dependencies]
+assert_cmd = "2.0.14"
+predicates = "3.1.0"
+assert_fs = "1.1.1"
